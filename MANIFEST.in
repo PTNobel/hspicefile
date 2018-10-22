@@ -1,0 +1,4 @@
+include MANIFEST.in
+include setup.py
+include hspicefile.py
+recursive-include src  *.c *.h

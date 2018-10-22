@@ -1,0 +1,69 @@
+diff --strip -Naur /tmp/hspicefile-1.01/src/hspice_read.c ./src/hspice_read.c
+--- /tmp/hspicefile-1.01/src/hspice_read.c	2018-10-18 16:25:44.290417142 -0700
++++ ./src/hspice_read.c	2018-10-18 16:25:55.363764317 -0700
+@@ -1,3 +1,9 @@
++// (c) Parth Nobel
++// Date: 18.10.2018
++// Modifications:
++// 1. Replaced int with size_t in a number of places to allow .tr0 files
++//    of size > 1GiB to be read.
++
+ // (c) Janez Puhan
+ // Date: 18.5.2009
+ // HSpice binary file import module
+@@ -169,7 +175,7 @@
+ //   numOfItems  ... number of items in block
+ //   swap        ... perform endian swap flag
+ int readBlockData(FILE *f, const char *fileName, int debugMode, void *ptr,
+-					int *offset, int itemSize, int numOfItems, int swap)
++					size_t *offset, int itemSize, int numOfItems, int swap)
+ {
+ 	int num = fread(ptr, itemSize, numOfItems, f);
+ 	if(num != numOfItems)
+@@ -225,7 +231,7 @@
+ //   debugMode   ... debug messages flag
+ //   ptr         ... pointer to already allocated space
+ //   size        ... new size in bytes
+-void *reallocate(int debugMode, void *ptr, int size)
++void *reallocate(int debugMode, void *ptr, size_t size)
+ {
+ 	// Allocate space for raw data.
+ 	void *tmp = PyMem_Realloc(ptr, size);
+@@ -246,7 +252,7 @@
+ //                 enlarged (reallocated) for current block
+ //   bufOffset ... pointer to buffer size, increased for current block size
+ int readHeaderBlock(FILE *f, int debugMode, const char *fileName, char **buf,
+-					int *bufOffset)
++					size_t *bufOffset)
+ {
+ 	char *tmpBuf;
+ 	int error, blockHeader[blockHeaderSize], swap;
+@@ -344,7 +350,7 @@
+ //                     enlarged (reallocated) for current block
+ //   rawDataOffset ... pointer to data array size, increased for current block size
+ int readDataBlock(FILE *f, int debugMode, const char *fileName, float **rawData,
+-				  int *rawDataOffset)
++				  size_t *rawDataOffset)
+ {
+ 	int error, blockHeader[blockHeaderSize], swap;
+ 	float *tmpRawData;
+@@ -396,7 +402,8 @@
+ 			  struct FastArray *faSweep, PyObject **tmpArray,
+ 			  struct FastArray *faPtr, char *scale, char **name, PyObject *dataList)
+ {
+-	int i, j, num, offset = 0, numOfColumns = numOfVectors;
++	int i, j, num, numOfColumns = numOfVectors;
++    size_t offset = 0;
+ 	npy_intp dims;
+ 	float *rawDataPos, *rawData = NULL;
+ 	PyObject *data = NULL; 
+@@ -524,7 +531,8 @@
+ 	const char *fileName;
+ 	char *token, *buf = NULL, **name = NULL;
+ 	int debugMode, num, numOfVectors, numOfVariables, type, sweepSize = 1,
+-		i = dateStartPosition - 1, offset = 0;
++		i = dateStartPosition - 1;
++    size_t offset = 0;
+ 	struct FastArray faSweep, *faPtr = NULL;
+ 	FILE *f = NULL;
+ 	PyObject *date = NULL, *title = NULL, *scale = NULL, *sweep = NULL,

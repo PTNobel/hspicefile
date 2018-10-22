@@ -1,0 +1,18 @@
+Metadata-Version: 1.1
+Name: hspicefile
+Version: 1.01
+Summary: read hspice binary files
+Home-page: UNKNOWN
+Author: Trey Greer
+Author-email: tgreer@nvidia.com
+License: UNKNOWN
+Description: 
+        hspicefile provides a simple function to read hspice binary output files.
+                
+        Taken from the PyOPUS package http://fides.fe.uni-lj.si/pyopus and ported
+        to Python3 by Trey Greer
+        
+Platform: Linux
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
